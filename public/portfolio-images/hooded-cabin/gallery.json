@@ -1,0 +1,24 @@
+{
+  "media": [
+    {
+      "type": "image",
+      "src": "MainRoom_JPG.jpg",
+      "title": ""
+    },
+    {
+      "type": "image",
+      "src": "Render1FinalComp.png",
+      "title": ""
+    },
+    {
+      "type": "image",
+      "src": "Render2gradedJPG.jpg",
+      "title": ""
+    },
+    {
+      "type": "video",
+      "src": "Timeline 1.mov",
+      "title": ""
+    }
+  ]
+}

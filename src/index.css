@@ -1,0 +1,193 @@
+﻿@import "tailwindcss";
+@source "./src/**/*.{html,js,ts,jsx,tsx}";
+
+
+.prose ul {
+    list-style-type: disc !important;
+    padding-left: 1.5rem !important;
+}
+
+.prose ol {
+    list-style-type: decimal !important;
+    padding-left: 1.5rem !important;
+}
+
+.prose li {
+    margin-left: 0.25rem;
+}
+.prose h1 {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.prose h2 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.prose h3 {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    margin-top: 0.75rem;
+    margin-bottom: 0.4rem;
+}
+.prose a {
+    color: #60a5fa !important;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.prose a:hover {
+    color: #93c5fd !important;
+    text-decoration: underline;
+}
+/* Inline math */
+.prose mjx-container[jax="SVG"]:not([display="true"]) {
+    display: inline-block !important;
+    margin: 0 !important;
+    vertical-align: middle;
+}
+
+/* Display math */
+.prose mjx-container[jax="SVG"][display="true"] {
+    display: block !important;
+    text-align: center !important;
+    margin: 1rem auto !important;
+}
+
+/* Center the SVG inside */
+.prose mjx-container[jax="SVG"][display="true"] svg {
+    display: inline-block !important;
+}
+
+/* Prevent overflow */
+.prose mjx-container[jax="SVG"] {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+}
+.prose mjx-container[jax="SVG"][display="true"] {
+    display: block !important;
+    text-align: center !important;
+
+    margin: 1rem auto !important;
+    padding: 1rem 1.25rem !important;
+
+    border: 0.5px solid rgba(255, 255, 255, 0.10);
+    border-radius: 10px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    background:
+        /* fine grid */
+            linear-gradient(to right, rgba(255,255,255,0.02) 0.5px, transparent 0.6px),
+            linear-gradient(to bottom, rgba(255,255,255,0.02) 0.5px, transparent 0.6px),
+
+
+                /* edge glow from all sides (fixed thickness) */
+            linear-gradient(to bottom, rgba(200,200,255,0.08) 0px, transparent 5px),
+            linear-gradient(to top, rgba(200,200,255,0.06) 0px, transparent 5px),
+            linear-gradient(to right, rgba(200,200,255,0.06) 0px, transparent 5px),
+            linear-gradient(to left, rgba(200,200,255,0.06) 0px, transparent 5px),
+
+
+                /* base glass tint */
+            rgba(0,0,0,0.15);
+
+
+    background-size: 20px 20px, 20px 20px, cover, cover, cover, cover, cover;
+
+
+    background-position: center;
+}
+
+
+
+/* Pretty scrollbar for math blocks */
+.prose mjx-container[jax="SVG"][display="true"]::-webkit-scrollbar {
+    height: 8px;
+}
+
+.prose mjx-container[jax="SVG"][display="true"]::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+}
+
+.prose mjx-container[jax="SVG"][display="true"]::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+}
+
+.prose mjx-container[jax="SVG"][display="true"]::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+    
+    
+}
+
+/* Pretty scrollbar for DETAILS PANEL (match math blocks) */
+.details-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.details-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+}
+
+.details-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+}
+
+.details-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+.details-scroll::-webkit-scrollbar-track {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+
+/* Code block container */
+.prose pre {
+    padding: 1rem 1.25rem !important;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.35) !important;
+    overflow-x: auto;
+    position: relative;
+}
+
+/* Alternating subtle stripes */
+.prose pre code {
+    display: block;
+    background-image: repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.03) 0px,
+            rgba(255,255,255,0.03) 24px,
+            rgba(255,255,255,0.00) 24px,
+            rgba(255,255,255,0.00) 48px
+    );
+    background-size: 100% 48px;
+}
+
+.ui-mono {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+
+
+
+
+
+
+
+
+
+
