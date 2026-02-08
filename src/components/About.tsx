@@ -76,7 +76,7 @@ export function About() {
               </p>
 
               <a
-                href="/cv-download/Ruben_OConnor_CV.pdf"
+                href="cv-download/RubenOConnor_CV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-3 border mb-15 border-white/30 text-white font-semibold uppercase tracking-widest text-sm hover:border-white/60 hover:text-white transition"
