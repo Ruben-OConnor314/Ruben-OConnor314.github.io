@@ -1,9 +1,17 @@
 [
   {
+    "id": "frustum-culling",
+    "title": "Camera Frustum Culling in Geometry Nodes (WIP)",
+    "category": "Technical Art",
+    "date": "2025",
+    "location": "",
+    "image": "/portfolio-images/frustum-culling/CameraSeesNDC.png"
+  },
+  {
     "id": "fougeron",
     "title": "Wavelet House",
     "category": "Architectural Visualisation",
-    "date": "2025",
+    "date": "2024",
     "location": "",
     "image": "/portfolio-images/fougeron/FougeronArch_Final2.jpg"
   },
@@ -22,13 +30,5 @@
     "date": "2020",
     "location": "",
     "image": "/portfolio-images/freelance-project/Render5.png"
-  },
-  {
-    "id": "frustum-culling",
-    "title": "Camera Frustum Culling in Geometry Nodes",
-    "category": "Technical Art",
-    "date": "2020",
-    "location": "",
-    "image": "/portfolio-images/frustum-culling/CameraSeesNDC.png"
   }
 ]
