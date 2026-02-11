@@ -18,7 +18,8 @@ To perform frustum culling, we require a boolean selection field that determines
 
 The camera’s projection matrix can be written as:
 
-$$M_P =
+$$
+M_P =
 \begin{bmatrix}
 \dfrac{2 f_{\text{mm}}}{s_w} & 0 & 0 & 0 \\
 0 & \dfrac{2 f_{\text{mm}} a}{s_w} & 0 & 0 \\
@@ -46,7 +47,8 @@ In general, however, the camera may be arbitrarily positioned and oriented in wo
 We will first define the world matrix $M_W$, then discuss why we chose to take its inverse.
 The cameras world matrix can be written generally as such;
 
-$$M_W =
+$$
+M_W =
 \begin{bmatrix}
 e_{11} & e_{21} & e_{31} & p_x \\
 e_{12} & e_{22} & e_{32} & p_y \\
@@ -57,15 +59,16 @@ $$
 
 Where $\mathbf{\hat{e}}_1, \mathbf{\hat{e}}_2, \mathbf{\hat{e}}_3$ are the orthonormal basis vectors of the camera. Geometry nodes uses a ***column-major*** layout, so;
 
-$$\large(\mathbf{\hat{e}}_i)_j = e_{ij}  \quad i,j \in \{1,2,3\}$$
+$$
+\large(\mathbf{\hat{e}}_i)_j = e_{ij}  \quad i,j \in \{1,2,3\}
+$$
 and position of the camera in world space:
 
 $$
 \large\vec{P} = \begin{bmatrix}
 p_x \\
 p_y \\
-p_z 
-
+p_z
 \end{bmatrix} \in \mathbb{R}^3
 $$
 
@@ -73,36 +76,47 @@ $$
 
 Let a point in homogenous world space:
 
-$$\large\mathbf{x}_w = \begin{bmatrix}
+$$
+\large\mathbf{x}_w = \begin{bmatrix}
 p_x \\
 p_y \\
 p_z \\
 1
-
-\end{bmatrix} \in \mathbb{R}^4_{\text Homogenous}$$
+\end{bmatrix} \in \mathbb{R}^4_{\text Homogenous}
+$$
 
 And let the cameras world matrix be $M_W$. Then:
 
-$$\large\mathbf{x}_w = M_W \cdot \mathbf{x}_c$$
+$$
+\large\mathbf{x}_w = M_W \cdot \mathbf{x}_c
+$$
 
 Multiplying a camera-space coordinate or point $\mathbf{x}_c$ with the world matrix, we get where it 'arrives' in world space.
 
 However, for frustum tests we require the opposite process. We want to take a point in **world space** and express it in the cameras local coordinate system, then we can decide if it lies inside or outside the frustum. 
 
 So lets solve the above equation for $\mathbf{x}_c$ ;
-$$\large\mathbf{x}_w = M_W \cdot \mathbf{x}_c$$
+$$
+\large\mathbf{x}_w = M_W \cdot \mathbf{x}_c
+$$
 
 Just invert $M_W$ to get it on the LHS, easy as pi!
 
-$$\large M^{-1}_W \cdot \mathbf{x}_w = \mathbf{x}_c$$
+$$
+\large M^{-1}_W \cdot \mathbf{x}_w = \mathbf{x}_c
+$$
 
 Thus:
 
-$$\large \mathbf{x}_c = M^{-1}_W \cdot \mathbf{x}_w$$
+$$
+\large \mathbf{x}_c = M^{-1}_W \cdot \mathbf{x}_w
+$$
 
 So the view matrix is just the inverted world matrix:
 
-$$\large M_V = M^{-1}_W $$
+$$
+\large M_V = M^{-1}_W 
+$$
 
 ![[Pasted image 20260210205514.png]]
 
