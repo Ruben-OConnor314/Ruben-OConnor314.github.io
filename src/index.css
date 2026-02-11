@@ -1,7 +1,6 @@
 ﻿@import "tailwindcss";
 @source "./src/**/*.{html,js,ts,jsx,tsx}";
 
-
 .prose ul {
     list-style-type: disc !important;
     padding-left: 1.5rem !important;
