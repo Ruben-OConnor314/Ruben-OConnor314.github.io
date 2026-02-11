@@ -24,7 +24,8 @@ $$M_P =
 0 & \dfrac{2 f_{\text{mm}} a}{s_w} & 0 & 0 \\
 0 & 0 & \dfrac{F+n}{n-F} & \dfrac{2Fn}{n-F} \\
 0 & 0 & -1 & 0
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 Where,
 - $F$ is the far clipping distance (cameras maximum view extent)
@@ -51,19 +52,22 @@ e_{11} & e_{21} & e_{31} & p_x \\
 e_{12} & e_{22} & e_{32} & p_y \\
 e_{13} & e_{23} & e_{33} & p_z \\
 0 & 0 & 0 & 1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 Where $\mathbf{\hat{e}}_1, \mathbf{\hat{e}}_2, \mathbf{\hat{e}}_3$ are the orthonormal basis vectors of the camera. Geometry nodes uses a ***column-major*** layout, so;
 
 $$\large(\mathbf{\hat{e}}_i)_j = e_{ij}  \quad i,j \in \{1,2,3\}$$
 and position of the camera in world space:
 
-$$\large\vec{P} = \begin{bmatrix}
+$$
+\large\vec{P} = \begin{bmatrix}
 p_x \\
 p_y \\
 p_z 
 
-\end{bmatrix} \in \mathbb{R}^3$$
+\end{bmatrix} \in \mathbb{R}^3
+$$
 
 #### <u>Inverting the world matrix to obtain the view matrix</u>
 
