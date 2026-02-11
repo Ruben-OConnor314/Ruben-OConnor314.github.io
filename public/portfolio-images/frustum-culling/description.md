@@ -1,7 +1,7 @@
 ﻿---
 title: Camera Frustum Culling in Geometry Nodes (WIP)
 category: Technical Art
-date: 2020  
+date: 2025 
 software:
 - Blender
 - Geometry Nodes
@@ -11,6 +11,19 @@ concepts:
 - Vector Subspaces
 - Projective Transformations
 ---
+
+<div class="callout">
+  <div class="callout-header">
+    <div class="callout-icon">i</div>
+    <span>Info</span>
+  </div>
+
+  <div class="callout-body">
+    This documents content is a work in progress and therefore incomplete, its original purpose was to test the implemented markdown renderer and the mathjax implementation. It will be completed with future site updates.
+  </div>
+</div>
+
+
 
 ## <u>The Projection Matrix</u>
 
@@ -119,227 +132,4 @@ $$
 \large M_V = M^{-1}_W
 $$
 
-![[Pasted image 20260210205514.png]]
-
-## Defining the clip-space transform
-
-The view matrix $M_V$ transforms points from world space into camera space. However, the cameras frustum is not defined purely by the camera basis vectors. It is also determined by the camera’s ***intrinsic perspective parameters***, such as focal length, sensor size, aspect ratio, and the near and far clipping planes. These properties, as discussed earlier, are encoded in the projection matrix $M_p$
-
-Once we express a point in camera space, applying the projection matrix maps it into **clip space**, a projective coordinate system in which the camera’s viewing volume becomes a canonical region.
-
-Let $\mathbf{\tilde{x}}_w \in \mathbb{R}^4$ be a point in homogenous world space. Then obtain the clip space coordinate $\mathbf{c}$ by applying the combined view-projection transform:
-
-$$\large \mathbf{c} = M_p\cdot M_V \cdot \mathbf{\tilde{x}}_w$$
-
-Lets define the combined clip transform matrix as:
-
-$$\large M_C = M_p\cdot M_V$$
-
-Thus:
-
-$$\large \mathbf{c} = M_C \cdot \mathbf{x}_w $$
-
-where:
-
-$$
-\large\mathbf{c}_w = \begin{bmatrix}
-c_x \\
-c_y \\
-c_z \\
-c_w
-\end{bmatrix} \in \mathbb{R}^4_{\text{Homogenous}}
-$$
-
-Unlike affine transformations, the projection matrix introduces a non-trivial $w$ component. The value $c_w$​ is depth-dependent, and it is responsible for the perspective effect.
-
-
-
-## The clip volume
-
-In clip space, the camera frustum is represented by a fixed canonical volume defined by the inequalities:
-
-$$\large
--c_w \le c_x \le c_w
-$$
-
-$$\large
--c_w \le c_y \le c_w
-$$
-
-$$\large
--c_w \le c_z \le c_w
-$$
-
-A point lies inside the camera frustum if and only if it satisfies all three bounds simultaneously.
-
-
-
-## Relation to normalized device coordinates (NDC)
-
-$$\large
-x_{ndc} = \frac{c_x}{c_w},\quad
-y_{ndc} = \frac{c_y}{c_w},\quad
-z_{ndc} = \frac{c_z}{c_w}
-$$
-
-$$\large
--1 \le x_{ndc} \le 1,\quad
--1 \le y_{ndc} \le 1,\quad
--1 \le z_{ndc} \le 1
-$$
-
-However, for frustum culling we do not need to explicitly compute the perspective divide. Instead, we may evaluate the equivalent inequalities directly in clip space.
-
-
-
-## Converting the bounds into half-space tests
-
-$$\large
-c_x \le c_w \quad\Rightarrow\quad c_w - c_x \ge 0
-$$
-
-$$\large
--c_w \le c_x \quad\Rightarrow\quad c_x + c_w \ge 0
-$$
-
-Applying the same rearrangement for all axes yields six half-space inequalities:
-
-$$\large
-c_w + c_x \ge 0,\quad c_w - c_x \ge 0
-$$
-
-$$\large
-c_w + c_y \ge 0,\quad c_w - c_y \ge 0
-$$
-
-$$\large
-c_w + c_z \ge 0,\quad c_w - c_z \ge 0
-$$
-
-A point lies inside the frustum if and only if all six inequalities are satisfied.
-
----
-
-## Extracting the frustum planes from the clip transform
-
-Recall that a point in homogeneous world space is transformed into clip space by:
-
-$$
-\mathbf{c} = M \tilde{\mathbf{p}}
-$$
-
-where
-
-$$
-M = M_p M_V
-$$
-
-and
-
-$$
-\tilde{\mathbf{p}} =
-\begin{bmatrix}
-p_x\\
-p_y\\
-p_z\\
-1
-\end{bmatrix}.
-$$
-
-Let the rows of the clip transform matrix $M$ be denoted as:
-
-$$
-M =
-\begin{bmatrix}
-\mathbf{r}_1^T\\
-\mathbf{r}_2^T\\
-\mathbf{r}_3^T\\
-\mathbf{r}_4^T
-\end{bmatrix}.
-$$
-
-Then the clip-space coordinates are given by:
-
-$$
-c_x = \mathbf{r}_1 \cdot \tilde{\mathbf{p}},\quad
-c_y = \mathbf{r}_2 \cdot \tilde{\mathbf{p}},\quad
-c_z = \mathbf{r}_3 \cdot \tilde{\mathbf{p}},\quad
-c_w = \mathbf{r}_4 \cdot \tilde{\mathbf{p}}.
-$$
-
-The canonical clip volume is defined by:
-
-$$
--c_w \le c_x \le c_w,\quad
--c_w \le c_y \le c_w,\quad
--c_w \le c_z \le c_w.
-$$
-
-Rearranging the first bound gives:
-
-$$
-c_x \le c_w \quad\Rightarrow\quad c_w - c_x \ge 0
-$$
-
-Substituting the row-dot expressions yields:
-
-$$
-(\mathbf{r}_4 \cdot \tilde{\mathbf{p}}) - (\mathbf{r}_1 \cdot \tilde{\mathbf{p}}) \ge 0
-$$
-
-which can be factored as:
-
-$$
-(\mathbf{r}_4 - \mathbf{r}_1)\cdot\tilde{\mathbf{p}} \ge 0.
-$$
-
-This has the standard plane half-space form:
-
-$$
-\pi \cdot \tilde{\mathbf{p}} \ge 0,
-$$
-
-therefore the right frustum plane is:
-
-$$
-\pi_R = \mathbf{r}_4 - \mathbf{r}_1.
-$$
-
-Similarly, the inequality:
-
-$$
--c_w \le c_x \quad\Rightarrow\quad c_x + c_w \ge 0
-$$
-
-yields the left plane:
-
-$$
-\pi_L = \mathbf{r}_4 + \mathbf{r}_1.
-$$
-
-Repeating this derivation for $y$ and $z$ produces the remaining frustum planes:
-
-$$
-\pi_B = \mathbf{r}_4 + \mathbf{r}_2,\quad
-\pi_T = \mathbf{r}_4 - \mathbf{r}_2
-$$
-
-$$
-\pi_N = \mathbf{r}_4 + \mathbf{r}_3,\quad
-\pi_F = \mathbf{r}_4 - \mathbf{r}_3.
-$$
-
-Thus, the clip transform matrix $M$ implicitly encodes all six frustum planes, since the frustum bounds are defined directly in terms of the clip coordinates $(c_x,c_y,c_z,c_w)$, each of which is generated by a row of $M$.
-
----
-
-## Combined half-space frustum test
-
-Let $\{\pi_i\}_{i=1}^6$ denote the set of extracted frustum planes. A point $\mathbf{p}$ is inside the camera frustum if and only if it lies in the positive half-space of all six planes:
-
-$$
-\text{Inside}(\mathbf{p}) =
-\bigwedge_{i=1}^{6}
-\left(\pi_i \cdot \tilde{\mathbf{p}} \ge 0\right).
-$$
-
+To be continued...
