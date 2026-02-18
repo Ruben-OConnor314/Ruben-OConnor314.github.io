@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
+
+
 import {
   motion,
   AnimatePresence,
@@ -26,11 +28,42 @@ type MediaItem = {
   title?: string;
 };
 
+
+
 interface ProjectModalProps {
   project: Project | null;
   isOpen: boolean;
   onClose: () => void;
 }
+
+type TocItem = {
+  id: string;
+  text: string;
+  level: number;
+};
+
+const slugify = (s: string) =>
+    s
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-");
+
+const extractToc = (markdown: string): TocItem[] => {
+  return markdown
+      .split("\n")
+      .map((line) => {
+        const match = line.match(/^(#{1,3})\s+(.*)$/);
+        if (!match) return null;
+
+        const level = match[1].length;
+        const text = match[2].trim();
+
+        return { id: slugify(text), text, level };
+      })
+      .filter(Boolean) as TocItem[];
+};
+
 
 export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -48,6 +81,15 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
   const velocityRef = useRef({ vx: 0, vy: 0 });
   const inertiaRef = useRef<number | null>(null);
   const currentMedia = media[currentIndex];
+  const isTechnical = frontmatter.layout === "technical";
+  const [toc, setToc] = useState<TocItem[]>([]);
+  const [activeId, setActiveId] = useState("");
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+
+
+
+
 
   const RESERVED_KEYS = new Set([
     "title",
@@ -55,6 +97,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
     "date",
     "location",
     "description",
+    "layout",
   ]);
 
   /* ---------------- HELPERS ---------------- */
@@ -100,7 +143,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
   const extraMetadataEntries = Object.entries(frontmatter || {}).filter(
     ([key]) => !RESERVED_KEYS.has(key),
   );
-
+  
   /* ---------------- EFFECTS ---------------- */
 
   useEffect(() => {
@@ -159,7 +202,58 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
     loadMarkdown();
   }, [isOpen, project]);
 
-  /* ---------------- Gallery Loading Effect ---------------- */
+  /* ---------------- Build TOC useEffect ---------------- */
+
+  useEffect(() => {
+    if (!mdDescription) return;
+
+    setTimeout(() => {
+      const container = document.getElementById("md-content");
+      if (!container) return;
+
+      const headings = Array.from(container.querySelectorAll("h1, h2, h3"));
+
+      const items = headings.map((h) => ({
+        id: h.id,
+        text: h.textContent || "",
+        level: parseInt(h.tagName.replace("H", "")),
+      }));
+
+      setToc(items);
+    }, 0);
+  }, [mdDescription]);
+
+
+  useEffect(() => {
+    if (!scrollRef.current) return;
+
+    const container = scrollRef.current;
+
+    const headings = Array.from(
+        container.querySelectorAll("h1, h2, h3")
+    ) as HTMLElement[];
+
+    if (!headings.length) return;
+
+    const onScroll = () => {
+      let current = "";
+
+      for (const h of headings) {
+        const rect = h.getBoundingClientRect();
+        if (rect.top < 150) current = h.id;
+      }
+
+      if (current) setActiveId(current);
+    };
+
+    container.addEventListener("scroll", onScroll);
+    onScroll();
+
+    return () => container.removeEventListener("scroll", onScroll);
+  }, [mdDescription]);
+
+
+  /* ---------------- Gallery Loading useEffect ---------------- */
   useEffect(() => {
     if (!isOpen || !project) return;
 
@@ -190,7 +284,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop — ONLY closes modal */}
+          {/* Backdrop — closes modal */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -208,7 +302,12 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             onClick={(e) => e.stopPropagation()}
             className="fixed inset-0 z-60 p-[clamp(12px,2vw,28px)]"
           >
-            <div className="relative w-full h-full">
+            <div
+                className={`relative w-full h-full ${
+                    isTechnical ? "max-w-[1300px] mx-auto" : ""
+                }`}
+            >
+              
               {/* Close */}
               <button
                 onClick={onClose}
@@ -227,6 +326,104 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
               </button>
 
               {/* Layout */}
+              {isTechnical ? (
+                  <div className="w-full h-full bg-neutral-900 text-white ring-2 ring-white/20 grid grid-cols-1 lg:grid-cols-[280px_1fr]">
+
+                    {/* ===== TOC SIDEBAR ===== */}
+                    <div className="hidden lg:block border-r border-white/10 p-6 overflow-y-auto">
+                      <p className="text-xs uppercase tracking-widest text-gray-500 mb-4">
+                        Contents
+                      </p>
+
+                      <ul className="space-y-2 text-sm">
+                        {toc.map((item) => (
+                            <li
+                                key={item.id}
+                                className={`cursor-pointer transition ${
+                                    item.level === 2 ? "pl-3" : item.level === 3 ? "pl-6" : "pl-0"
+                                } ${
+                                    activeId === item.id
+                                        ? "text-white font-semibold"
+                                        : "text-gray-400 hover:text-gray-200"
+                                }`}
+                                onClick={() => {
+                                  const el = document.getElementById(item.id);
+                                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                                }}
+                            >
+                              {item.text}
+                            </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* ===== MAIN SCROLL CONTENT ===== */}
+                    <div className="details-scroll h-full overflow-y-auto bg-neutral-900 text-white ring-2 ring-white/20">
+                      <div className="mx-auto max-w-[900px] px-10 py-10">
+
+                      <p className="text-sm text-gray-400 uppercase tracking-widest mb-2">
+                        {frontmatter.category}
+                      </p>
+
+                      <h2 className="text-3xl lg:text-4xl font-bold tracking-tighter mb-6">
+                        {frontmatter.title}
+                      </h2>
+
+                      <div className="flex flex-col gap-4 text-gray-300 mb-6">
+                        {frontmatter.date && (
+                            <div className="flex items-center gap-3">
+                              <Calendar size={18} />
+                              {frontmatter.date}
+                            </div>
+                        )}
+
+                        {frontmatter.location && (
+                            <div className="flex items-center gap-3">
+                              <MapPin size={18} />
+                              {frontmatter.location}
+                            </div>
+                        )}
+                      </div>
+
+                      {extraMetadataEntries.length > 0 && (
+                          <div className="mt-8 border-t border-white/10 pt-6 mb-8">
+                            <h3 className="text-sm uppercase tracking-widest text-gray-400 mb-4">
+                              Project Info
+                            </h3>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-4 text-gray-300 text-sm">
+                              {extraMetadataEntries.map(([key, value]) => (
+                                  <div key={key}>
+                                    <p className="text-gray-500 uppercase tracking-widest text-xs mb-1">
+                                      {key}
+                                    </p>
+
+                                    {Array.isArray(value) ? (
+                                        <ul className="list-disc pl-5 space-y-1">
+                                          {value.map((item: any, idx: number) => (
+                                              <li key={idx}>{String(item)}</li>
+                                          ))}
+                                        </ul>
+                                    ) : (
+                                        <p>{String(value)}</p>
+                                    )}
+                                  </div>
+                              ))}
+                            </div>
+                          </div>
+                      )}
+
+                      <div id="md-content">
+                        <MarkdownRenderer content={mdDescription} />
+                      </div>
+                        
+                        
+                      
+                    </div>
+                  </div>    
+                  </div>
+                    
+              ) : (
               <div
                 className={`grid w-full h-full min-h-0 grid-cols-1 md:grid-rows-1 transition-all duration-300 ${
                   detailsExpanded ? "md:grid-cols-6" : "md:grid-cols-4"
@@ -537,6 +734,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
 
                   <div className="mb-auto -mr-3 pr-3">
                     <MarkdownRenderer content={mdDescription} />
+                      
                   </div>
 
                   <div className="pt-8 border-t border-white/10 mt-8">
@@ -546,6 +744,8 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                   </div>
                 </div>
               </div>
+              )}
+
             </div>
           </motion.div>
         </>

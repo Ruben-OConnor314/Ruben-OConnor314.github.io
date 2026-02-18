@@ -4,6 +4,8 @@ import remarkMath from "remark-math";
 import rehypeMathjax from "rehype-mathjax";
 import remarkBreaks from "remark-breaks";
 import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug";
+
 
 export default function MarkdownRenderer({ content }: { content: string }) {
   return (
@@ -17,9 +19,13 @@ export default function MarkdownRenderer({ content }: { content: string }) {
       prose-h4:text-lg prose-h4:font-semibold"
     >
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
+        remarkPlugins={[
+            remarkGfm, 
+            remarkMath, 
+            remarkBreaks]}
         rehypePlugins={[
-          rehypeRaw,
+          rehypeRaw, 
+          rehypeSlug,
           [
             rehypeMathjax,
             {

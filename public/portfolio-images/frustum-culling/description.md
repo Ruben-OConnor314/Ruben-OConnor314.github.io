@@ -1,6 +1,7 @@
 ﻿---
 title: Camera Frustum Culling in Geometry Nodes (WIP)
 category: Technical Art
+layout: technical
 date: 2025 
 software:
 - Blender
@@ -88,7 +89,7 @@ $$
 
 #### <u>Inverting the world matrix to obtain the view matrix</u>
 
-Let a point in homogenous world space:
+Let a point in homogenous world space be:
 
 $$
 \large\mathbf{x}_w = \begin{bmatrix}
@@ -114,7 +115,7 @@ $$
 \large\mathbf{x}_w = M_W \cdot \mathbf{x}_c
 $$
 
-Just invert $M_W$ to get it on the LHS, easy as pi!
+Just invert $M_W$ to get it on the LHS:!
 
 $$
 \large M^{-1}_W \cdot \mathbf{x}_w = \mathbf{x}_c
@@ -131,5 +132,6 @@ So the view matrix is just the inverted world matrix:
 $$
 \large M_V = M^{-1}_W
 $$
+![Projection Matrix Diagram](/portfolio-images/frustum-culling/LocalSpace_Matrix.svg)
 
 To be continued...
