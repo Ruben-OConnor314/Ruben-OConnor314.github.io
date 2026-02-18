@@ -75,15 +75,28 @@ export function About() {
                 visualisers, and clients under real project constraints.
               </p>
 
-              <a
-                href="cv-download/RubenOConnor_CV.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-3 border mb-15 border-white/30 text-white font-semibold uppercase tracking-widest text-sm hover:border-white/60 hover:text-white transition"
-              >
-                <FileText size={18} className="opacity-80" />
-                Download CV
-              </a>
+              <div className="flex gap-6">
+                <a
+                    href="cv-download/RubenOConnor_CV.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-3 border mb-15 border-white/30 text-white font-semibold uppercase tracking-widest text-sm hover:border-white/60 hover:text-white transition"
+                >
+                  <FileText size={18} className="opacity-80" />
+                  Download CV
+                </a>
+
+                <a
+                    href="pf-download/RubenOConnor_PF.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-3 border mb-15 border-white/30 text-white font-semibold uppercase tracking-widest text-sm hover:border-white/60 hover:text-white transition"
+                >
+                  <FileText size={18} className="opacity-80" />
+                  Download Portfolio
+                </a>
+              </div>
+
 
               {/* Experience Section */}
               <div className="mb-12">
