@@ -109,27 +109,19 @@
     margin: 1rem auto !important;
     padding: 1rem 1.25rem !important;
 
-    border: 0.5px solid rgba(255, 255, 255, 0.10);
-    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
 
     overflow-x: auto;
     overflow-y: hidden;
 
     background:
         /* fine grid */
-            linear-gradient(to right, rgba(255,255,255,0.02) 0.5px, transparent 0.6px),
-            linear-gradient(to bottom, rgba(255,255,255,0.02) 0.5px, transparent 0.6px),
-
-
-                /* edge glow from all sides (fixed thickness) */
-            linear-gradient(to bottom, rgba(200,200,255,0.08) 0px, transparent 5px),
-            linear-gradient(to top, rgba(200,200,255,0.06) 0px, transparent 5px),
-            linear-gradient(to right, rgba(200,200,255,0.06) 0px, transparent 5px),
-            linear-gradient(to left, rgba(200,200,255,0.06) 0px, transparent 5px),
-
-
-                /* base glass tint */
-            rgba(0,0,0,0.15);
+            linear-gradient(to right, rgba(255,255,255,0.01) 0.5px, transparent 0.6px),
+            linear-gradient(to bottom, rgba(255,255,255,0.01) 0.5px, transparent 0.6px),
+            
+                /* base tint */
+            rgba(0,0,10,0.1);
 
 
     background-size: 20px 20px, 20px 20px, cover, cover, cover, cover, cover;

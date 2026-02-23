@@ -140,11 +140,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             onClick={(e) => e.stopPropagation()}
             className="fixed inset-0 z-60 p-[clamp(12px,2vw,28px)]"
           >
-            <div
-                className={`relative w-full h-full ${
-                    isTechnical ? "max-w-[1300px] mx-auto" : ""
-                }`}
-            >
+            <div className="relative w-full h-full">
               
               {/* Close */}
               <button
