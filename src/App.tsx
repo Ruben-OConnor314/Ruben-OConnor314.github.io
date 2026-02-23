@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
-import { PortfolioGrid, Project } from "./components/PortfolioGrid";
-import { ProjectModal } from "./components/ProjectModal";
+import { PortfolioGrid, Project } from "./components/projectModal/PortfolioGrid";
+import { ProjectModal } from "./components/projectModal/ProjectModal";
 import { About } from "./components/About";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
