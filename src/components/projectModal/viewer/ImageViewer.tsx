@@ -23,7 +23,7 @@ export default function ImageViewer({
                                     }: ImageViewerProps) {
     const currentMedia = gallery[currentIndex];
     return (
-        <div>
+        <div className="h-full min-h-0">
             {/* ================= IMAGE PANEL ================= */}
             <div
                 className="

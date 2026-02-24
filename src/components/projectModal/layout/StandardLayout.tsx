@@ -33,10 +33,13 @@ export default function StandardLayout({
                                        }: StandardLayoutProps) {
     return (
         <div
-        className={`grid w-full h-full min-h-0 grid-cols-1 md:grid-rows-1 transition-all duration-300 ${
-            detailsExpanded ? "md:grid-cols-6" : "md:grid-cols-4"
-        }`}
-    >
+            className={`grid w-full h-full min-h-0
+  grid-cols-1
+  md:grid-rows-[minmax(0,1fr)]
+  transition-all duration-300
+  ${detailsExpanded ? "md:grid-cols-6" : "md:grid-cols-4"}
+`}
+        >
 
             <div
                 className={
